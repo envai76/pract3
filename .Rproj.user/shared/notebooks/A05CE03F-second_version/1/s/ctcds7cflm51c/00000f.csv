@@ -1,0 +1,103 @@
+"0","# load packages"
+"0","library(ggplot2)"
+"0","library(torch)"
+"0","library(torchvision)"
+"0","library(luz)"
+"0","library(gridExtra)"
+"0","library(imager)"
+"2","Loading required package: magrittr
+"
+"2","
+Attaching package: ‘imager’
+
+"
+"2","The following object is masked from ‘package:magrittr’:
+
+    add
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    convolve, spectrum
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    frame
+
+"
+"2","The following object is masked from ‘package:base’:
+
+    save.image
+
+"
+"0","library(jpeg)"
+"0","library(magick)"
+"2","Linking to ImageMagick 6.9.12.3
+Enabled features: cairo, freetype, fftw, ghostscript, heic, lcms, pango, raw, rsvg, webp
+Disabled features: fontconfig, x11
+"
+"0","library(EBImage)"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","
+Attaching package: ‘EBImage’
+
+"
+"2","The following objects are masked from ‘package:imager’:
+
+    channel, dilate, display, erode, resize, watershed
+
+"
+"0","library(grid)"
+"2","
+Attaching package: ‘grid’
+
+"
+"2","The following object is masked from ‘package:imager’:
+
+    depth
+
+"
+"0","library(dplyr)"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following object is masked from ‘package:EBImage’:
+
+    combine
+
+"
+"2","The following object is masked from ‘package:imager’:
+
+    where
+
+"
+"2","The following object is masked from ‘package:gridExtra’:
+
+    combine
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(abind)"
+"2","
+Attaching package: ‘abind’
+
+"
+"2","The following object is masked from ‘package:EBImage’:
+
+    abind
+
+"

@@ -125,7 +125,13 @@ sort(sample(files, 20))
 
 In the output above, you can see the filenames for all the chest X-rays. Look carefully at the filenames for the X-rays showing pneumonia (i.e., those in `{train,test}/PNEUMONIA`).
 
+
+
 **1\_** Do these filenames tell you anything about pneumonia? Why might this make predicting pneumonia more challenging?
+
+It is expected that the dataset folder consists of three subfolders: train, test, and validate. Within each of these subfolders, there are two folders representing the classes or labels in our classification task: "normal" and "pneumonia". The provided code snippet allows us to navigate through the dataset's directory structure and gather details such as the count of images and their distribution across the different classes. This information is valuable for comprehending the dataset and organizing the subsequent stages of the image classification task.
+Looking at the filenames for the X-rays showing pneumonia, we can observe that they include information about the patient and the type of infection (e.g., bacteria or virus). For example, some filenames contain terms like "bacteria" or "virus" along with a unique identifier for the patient.
+
 
 The dataset folder is assumed to contain three subfolders: train, test, and validate. Each of these subfolders further contains two folders representing the two classes or labels in our classification task: "normal" and "pneumonia". The code provides a way to explore the dataset directory structure and obtain information about the number of images and their distribution across different classes. This information can be helpful in understanding the dataset and planning the subsequent steps of the image classification task.
 
@@ -237,6 +243,21 @@ grid.arrange(grobs = plots, nrow = 2, ncol = 2)
 **2\_** From looking at only 3 images do you see any attribute of the images that we may have to normalise before training a model?
 
 yes, i think the images dose not have same size and one other point is, its better to check the values of each cell of each image and bring it into the range(0,1) if it's in range for example (0,255).
+
+Without examining the actual images or having more information about their characteristics, it is challenging to identify specific attributes that may require normalization. However, there are some common attributes in medical image datasets that often benefit from normalization before training a model. Here are a few possibilities:
+
+1. **Image Intensity**: The pixel intensity values in medical images can vary significantly due to differences in acquisition settings or equipment. Normalizing the pixel intensities across images can help to remove such variations and make the data more consistent.
+
+2. **Image Size**: Images in a dataset might have different spatial resolutions or sizes. Rescaling the images to a standardized size can ensure that the model receives consistent input dimensions during training.
+
+3. **Contrast**: Medical images can have varying contrast levels, which can affect the visibility of certain features. Normalizing the contrast by applying techniques such as histogram equalization or adaptive contrast enhancement can enhance the consistency of image features.
+
+4. **Orientation**: In some cases, images may have different orientations or alignments. Ensuring a consistent orientation across all images can help in maintaining uniformity and avoiding biases during training.
+
+5. **Anatomical Variations**: Medical images can exhibit variations in anatomical structures due to patient demographics or imaging protocols. Normalizing the images to a common anatomical reference or accounting for anatomical variations during preprocessing can be beneficial.
+
+It is important to note that the specific normalization techniques will depend on the characteristics of the dataset and the requirements of the model you plan to use. It is recommended to analyze the dataset thoroughly and consult with domain experts to determine the appropriate normalization steps to apply for your particular task.
+
 
 # Data Pre-processing
 
@@ -366,9 +387,24 @@ grid.arrange(fig, nrow = 1)
 
 As you can see, the provided dataset is completely balanced in all sets.
 
+
 **3\_** if the dataset was not balanced, what kind of techniques could be useful?
 
-data augmentation would help or using different sampling methods (like Smote) can help also.
+If the dataset is not balanced, meaning that there is a significant difference in the number of samples between different classes, several techniques can be useful to address this issue. Here are some approaches commonly used to handle imbalanced datasets:
+
+1. **Data Resampling**: This technique involves either oversampling the minority class or undersampling the majority class to achieve a more balanced representation of the classes. Oversampling techniques include duplication or generating synthetic samples, while undersampling involves randomly removing samples from the majority class. Both methods aim to equalize the class distribution.
+
+2. **Data Augmentation**: Data augmentation techniques can be applied to increase the number of samples in the minority class by generating new samples through transformations such as rotations, translations, or flips. This helps to diversify the data and create a more balanced dataset.
+
+3. **Class Weighting**: Many machine learning algorithms allow assigning different weights to different classes during training. By assigning higher weights to the minority class, the model gives it more importance, effectively balancing the impact of each class on the training process.
+
+4. **Ensemble Methods**: Ensemble methods, such as bagging or boosting, can be beneficial for imbalanced datasets. These techniques involve combining multiple models to improve performance. By training models on different subsets of the data, ensemble methods can reduce the impact of class imbalance and enhance overall predictive accuracy.
+
+5. **Cost-Sensitive Learning**: Cost-sensitive learning assigns different misclassification costs to different classes. By assigning higher costs to misclassifying the minority class, the model is encouraged to focus more on correctly predicting the minority class instances.
+
+6. **Anomaly Detection**: In some cases, the imbalanced class can be treated as an anomaly or rare event. Anomaly detection techniques can be applied to identify and focus on the minority class instances, treating them as special cases during the modeling process.
+
+It's important to note that the choice of technique depends on the specific problem and dataset characteristics. It's advisable to experiment with different approaches and evaluate their impact on model performance to determine the most effective strategy for handling the imbalanced dataset.
 
 # Trainig
 
@@ -586,15 +622,40 @@ print(loss_plot)
 print(acc_plot)
 ```
 
+
 **4\_** Based on the training and test accuracy, is this model actually managing to classify X-rays into pneumonia vs normal? What do you think contributes to this? why?
 
-actually as we can see in the train and test loss plot, the loss has not reduced that much. and it shows that the model needs more epochs to train to gain a better performance also the accuracy plot shows the same idea. the accuracy we gained is like tossing a coin and see if it comes up, say class Normal and if it comes back, say class Pneumonia. so it's better we use a coin instead of this model because of it's less cost from training this model (laughing). also it's visible that the accuracy has increased in the third epoch.
+
+Based on the training and test accuracy, it appears that the model is not performing well in classifying X-rays into pneumonia vs normal. The loss plot shows that the model has not significantly reduced the loss, indicating that it needs more training epochs to improve its performance. The accuracy plot also demonstrates a similar trend. The achieved accuracy is comparable to randomly guessing the classes, suggesting that the model is not effectively learning from the data.
+
+In a lighthearted manner, it can be humorously suggested that using a coin toss might be more cost-effective than training this model. The model's accuracy is not significantly better than chance, indicating that it is not capturing the underlying patterns in the data.
+
+Several factors could contribute to these observations. The model may be too complex for the available data, resulting in overfitting or difficulties in generalizing to new examples. Alternatively, the model architecture or hyperparameters may not be suitable for the specific task, requiring adjustments such as changing the training batches or increasing the number of training epochs.
+
+In summary, the model's current performance suggests that it is struggling to effectively learn from the data, and further exploration and modifications may be necessary to improve its classification capabilities.
 
 It seems that the model is not training effectively the model is struggling to learn from the data and is not generalizing well to unseen examples. may be this model is too complex for the data or reverse. or the training batches should change or the epoched should be more.
 
+
 **5\_** what is your suggestions to solve this problem? How could we improve this model?
 
-I think if we run the model with more epochs and let it explore more would help to increase the accuracy or even if it doesn't help we can try to different architectures for our model, may be a new model with different layers and neurons can act better on this data set. also its an other suggestion that this model may be too complex or the training process needs adjustments.
+
+I think if we run the model with more epochs and let it explore more would help to increase the accuracy or even if it doesn't help we can try to different architectures for our model, may be a new model with different layers and neurons can act better on this data set. To improve the model's performance, it is suggested to increase the number of training epochs, allowing the model to explore the data further and potentially increase the accuracy. Additionally, experimenting with different model architectures could be beneficial.
+Trying out new models with different layers and neurons might provide better results for this dataset. It is worth considering that the current model may be too complex for the available data, and simplifying it or making adjustments to the training process could be necessary.
+
+In addition to the suggestions mentioned, here are some additional recommendations to improve the model:
+
+1. **Data Augmentation**: Applying data augmentation techniques, such as random rotations, flips, or zooms, can artificially increase the diversity of the training data. This can help the model generalize better to unseen examples and improve its performance.
+
+2. **Transfer Learning**: Instead of training a model from scratch, leveraging pre-trained models on a large-scale dataset (e.g., ImageNet) can be beneficial. By utilizing transfer learning, the model can benefit from the learned features and patterns in the pre-trained model, which can help improve its performance on the pneumonia vs normal classification task.
+
+3. **Hyperparameter Tuning**: Experimenting with different hyperparameter settings, such as learning rate, batch size, or optimizer, can help find the optimal configuration for the model. This process can be done using techniques like grid search or random search to systematically explore the hyperparameter space.
+
+4. **Regularization Techniques**: Applying regularization techniques like L1 or L2 regularization, dropout, or batch normalization can help prevent overfitting and improve the model's ability to generalize to unseen data.
+
+5. **Ensemble Learning**: Creating an ensemble of multiple models and combining their predictions can often lead to improved performance. By training several models with different architectures or variations in training data, the ensemble can capture a wider range of patterns and make more accurate predictions.
+
+It is important to iteratively test and evaluate these suggestions to determine which approaches work best for improving the model's performance on the pneumonia vs normal classification task.
 
 # Data Augmentation
 
@@ -743,23 +804,24 @@ print(acc_plot)
 
 actually after training just for 2 epoches its hard to judge the model's performance. it must train more to see the result after more epochs based on the trend it takes (for example may be it 20 or 50 epochs) .
 
+
 **6\_** What are the potential drawbacks or disadvantages of data augmentation?
 
 practically the using data augmentation has not added lots of improvements to the accuracy. based on that it's not going to make a deep change to the pixels of an image . for example rotating or some thing like it would not make lots of change in the pattern of the image.
 
 While data augmentation offers several benefits, it also has potential drawbacks and disadvantages that should be considered. Some of these drawbacks include:
 
-Overfitting: Data augmentation can sometimes lead to overfitting, especially if the augmentation techniques are too aggressive or applied excessively. Overfitting occurs when the model becomes too specialized in the augmented data and performs poorly on real-world, unseen data. It is essential to strike a balance between augmentation and the original data to avoid overfitting.
+1.**Overfitting**: Data augmentation can sometimes lead to overfitting, especially if the augmentation techniques are too aggressive or applied excessively. Overfitting occurs when the model becomes too specialized in the augmented data and performs poorly on real-world, unseen data. It is essential to strike a balance between augmentation and the original data to avoid overfitting.
 
-Loss of data fidelity: Certain data augmentation techniques, such as random cropping, flipping, or rotation, may introduce distortions or alterations that could affect the fidelity of the original data. These transformations can modify the contextual relationships within the data, potentially leading to the model learning incorrect or misleading patterns.
+2.**Loss of data fidelity**: Certain data augmentation techniques, such as random cropping, flipping, or rotation, may introduce distortions or alterations that could affect the fidelity of the original data. These transformations can modify the contextual relationships within the data, potentially leading to the model learning incorrect or misleading patterns.
 
-Increased computational requirements: Data augmentation increases the amount of data that needs to be processed during training. As a result, it requires additional computational resources and time to perform the augmentations on the fly. If the augmentation process is time-consuming, it can slow down the training process, making it less efficient.
+3.**Increased computational requirements**: Data augmentation increases the amount of data that needs to be processed during training. As a result, it requires additional computational resources and time to perform the augmentations on the fly. If the augmentation process is time-consuming, it can slow down the training process, making it less efficient.
 
-Limited diversity in augmented samples: Data augmentation techniques are often applied to existing data samples, resulting in variations of the original samples. However, this may not capture the full diversity of the underlying data distribution. Augmentation cannot create entirely new, unique data points that represent different aspects of the problem space. Therefore, the augmented dataset may still lack certain variations that could be important for accurate model training.
+4.**Limited diversity in augmented samples**: Data augmentation techniques are often applied to existing data samples, resulting in variations of the original samples. However, this may not capture the full diversity of the underlying data distribution. Augmentation cannot create entirely new, unique data points that represent different aspects of the problem space. Therefore, the augmented dataset may still lack certain variations that could be important for accurate model training.
 
-Inconsistent augmentation effects: The impact of data augmentation on model performance can vary depending on the specific problem, dataset, and augmentation techniques used. Some augmentation techniques may work well for one task but not for another. It requires careful experimentation and validation to determine the most effective augmentation strategy for a particular problem, which can be time-consuming and resource-intensive.
+5.**Inconsistent augmentation effects**: The impact of data augmentation on model performance can vary depending on the specific problem, dataset, and augmentation techniques used. Some augmentation techniques may work well for one task but not for another. It requires careful experimentation and validation to determine the most effective augmentation strategy for a particular problem, which can be time-consuming and resource-intensive.
 
-Augmentation bias: If the data augmentation techniques are not carefully chosen or applied, they may introduce biases into the training data. For example, if the augmentation disproportionately amplifies certain characteristics or biases already present in the original data, the model may become biased and make unfair or inaccurate predictions.
+6.**Augmentation bias**: If the data augmentation techniques are not carefully chosen or applied, they may introduce biases into the training data. For example, if the augmentation disproportionately amplifies certain characteristics or biases already present in the original data, the model may become biased and make unfair or inaccurate predictions.
 
 It's important to note that while these drawbacks exist, data augmentation remains a valuable technique in machine learning, as it can help improve model generalization, increase dataset size, and enhance robustness to variations in input data. The key lies in understanding the limitations and potential risks associated with data augmentation and using it judiciously in combination with other best practices for model training and evaluation.
 
@@ -770,6 +832,7 @@ Transfer learning is another technique in machine learning where knowledge gaine
 Torchvison provides versions of all the integrated architectures that have already been trained on the ImageNet dataset.
 
 **7\_** What is ImageNet aka "ImageNet Large Scale Visual Recognition Challenge 2012"? How many images and classes does it involve? Why might this help us?
+
 
 ImageNet, also known as the "ImageNet Large Scale Visual Recognition Challenge 2012," is a dataset and benchmark in the field of computer vision. It was created by researchers at Stanford University and is widely recognized as a significant milestone in the development of deep learning and image classification algorithms.
 
@@ -787,23 +850,26 @@ Overall, ImageNet's large-scale dataset and challenge played a pivotal role in t
 
 MobileNet is a pre-trained model that can be effectively utilized in transfer learning scenarios. Do some research about this model.
 
+
 **8\_** Why do you think using this architecture in this practical assignment can help to improve the results? Hint: See MobileNet publication
 
 Using the MobileNet architecture in a practical assignment can help improve the results for several reasons, as outlined in the MobileNet publication. Here are a few key points:
 
-Efficiency: MobileNet is specifically designed to be computationally efficient and have a smaller model size compared to traditional deep learning architectures. It achieves this through the use of depth-wise separable convolutions, which significantly reduce the number of parameters and operations required. As a result, MobileNet can run faster on resource-constrained devices, making it suitable for real-time applications or scenarios with limited computational resources.
+1.**Efficiency**: MobileNet is specifically designed to be computationally efficient and have a smaller model size compared to traditional deep learning architectures. It achieves this through the use of depth-wise separable convolutions, which significantly reduce the number of parameters and operations required. As a result, MobileNet can run faster on resource-constrained devices, making it suitable for real-time applications or scenarios with limited computational resources.
 
-Speed and latency: The efficiency of MobileNet translates into faster inference speeds and lower latency, making it advantageous in applications where real-time or near-real-time performance is crucial. By reducing the computational overhead, MobileNet allows for quicker predictions and faster processing of input data.
+2.**Speed and latency**: The efficiency of MobileNet translates into faster inference speeds and lower latency, making it advantageous in applications where real-time or near-real-time performance is crucial. By reducing the computational overhead, MobileNet allows for quicker predictions and faster processing of input data.
 
-Accuracy and performance: Despite its efficiency, MobileNet still achieves competitive accuracy compared to larger and more computationally expensive models. The architecture is carefully designed to strike a balance between model size and accuracy, making it well-suited for tasks where a good trade-off between speed and performance is required. MobileNet has demonstrated strong performance on tasks such as image classification, object detection, and semantic segmentation.
+3.**Accuracy and performance**: Despite its efficiency, MobileNet still achieves competitive accuracy compared to larger and more computationally expensive models. The architecture is carefully designed to strike a balance between model size and accuracy, making it well-suited for tasks where a good trade-off between speed and performance is required. MobileNet has demonstrated strong performance on tasks such as image classification, object detection, and semantic segmentation.
 
-Transfer learning and fine-tuning: MobileNet has been pre-trained on large-scale datasets such as ImageNet, which helps to capture a general understanding of visual features. Leveraging transfer learning, one can use a pre-trained MobileNet model as a starting point and fine-tune it on a specific task or dataset. This can save significant training time and computational resources while still benefiting from the knowledge learned from the ImageNet dataset.
+4.**Transfer learning and fine-tuning**: MobileNet has been pre-trained on large-scale datasets such as ImageNet, which helps to capture a general understanding of visual features. Leveraging transfer learning, one can use a pre-trained MobileNet model as a starting point and fine-tune it on a specific task or dataset. This can save significant training time and computational resources while still benefiting from the knowledge learned from the ImageNet dataset.
 
-Mobile and embedded applications: MobileNet's efficiency and smaller model size make it particularly suitable for deployment on mobile devices and embedded systems. Its lightweight nature allows for on-device inference, reducing the need for frequent data transfers to remote servers and ensuring privacy and faster response times. MobileNet has enabled a wide range of applications on mobile platforms, including image recognition, object detection, and even real-time video processing.
+5.**Mobile and embedded applications**: MobileNet's efficiency and smaller model size make it particularly suitable for deployment on mobile devices and embedded systems. Its lightweight nature allows for on-device inference, reducing the need for frequent data transfers to remote servers and ensuring privacy and faster response times. MobileNet has enabled a wide range of applications on mobile platforms, including image recognition, object detection, and even real-time video processing.
 
 By leveraging the MobileNet architecture in a practical assignment, one can potentially achieve faster inference, reduced latency, improved efficiency, and competitive accuracy, making it a compelling choice for various real-world applications.
 
-**9\_** How many parameters does this network have? How does this compare to better performing networks available in torch? The number of parameters in a neural network is a key indicator of its complexity and memory requirements. The specific number of parameters in a network depends on various factors such as the network architecture, layer sizes, and connectivity patterns.
+**9\_** How many parameters does this network have? How does this compare to better performing networks available in torch?
+
+The number of parameters in a neural network is a key indicator of its complexity and memory requirements. The specific number of parameters in a network depends on various factors such as the network architecture, layer sizes, and connectivity patterns.
 
 Regarding the MobileNet architecture, there are different variations and versions available, each with different complexities. The original MobileNet architecture introduced in the paper "MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications" by Howard et al. consists of depth-wise separable convolutions and point-wise convolutions.
 
@@ -831,7 +897,7 @@ In the following you can see an example of how we can load pre-trained models in
 
 **10\_** Using the provided materials in this practical, train a different network architecture. Does this perform better?
 
-i tried mobilenet but it was really hard to configure it's error and solve it. so i decided to train an other costume architecture.
+I tried mobilenet but it was really hard to configure it's error and solve it. so i decided to train an other costume architecture.
 
 as i know the knit would run all chunks in order, so for ignoring the output of data augmentation chunk i prefer to rerun the following chunk:
 
@@ -873,7 +939,8 @@ batch = train_dataloader$.iter()$.next()
 batch[[1]]$size()
 ```
 
-actually i tried to train the data with different model like the modeified model in following.
+
+Actually i tried to train the data with different model like the modeified model in following.
 
 ```{r}
 new_net <- nn_module(
@@ -934,7 +1001,7 @@ new_net <- nn_module(
 
 ```
 
-lets train the very simplified new net above:
+Lets train the very simplified new net above:
 
 ```{r warning=FALSE}
 # Set the number of epochs
@@ -973,7 +1040,41 @@ for (epoch in 1:num_epochs) {
 
 ```
 
-or an other modellike below, i just added an other linear model.
+## Plot learning curves
+
+```{r}
+# Plot the train and test loss
+loss_df <- data.frame(
+  Epoch = 1:num_epochs,
+  Train_Loss = train_loss,
+  Test_Loss = test_loss
+)
+loss_plot <- ggplot(data = loss_df) +
+  geom_line(aes(x = Epoch, y = Train_Loss, color = "Train Loss")) +
+  geom_line(aes(x = Epoch, y = Test_Loss, color = "Test Loss")) +
+  labs(x = "Epoch", y = "Loss") +
+  scale_color_manual(values = c("Train Loss" = "blue", "Test Loss" = "red")) +
+  theme_minimal()
+
+# Plot the train and test accuracy
+acc_df <- data.frame(
+  Epoch = 1:num_epochs,
+  Train_Accuracy = train_acc,
+  Test_Accuracy = test_acc
+)
+acc_plot <- ggplot(data = acc_df) +
+  geom_line(aes(x = Epoch, y = Train_Accuracy, color = "Train Accuracy")) +
+  geom_line(aes(x = Epoch, y = Test_Accuracy, color = "Test Accuracy")) +
+  labs(x = "Epoch", y = "Accuracy") +
+  scale_color_manual(values = c("Train Accuracy" = "blue", "Test Accuracy" = "red")) +
+  theme_minimal()
+
+# Print the plots
+print(loss_plot)
+print(acc_plot)
+```
+
+Or an other model like below, i just added an other linear model in compare to the first model  you have provided in top of this file.
 
 ```{r}
 new_net_two <- nn_module(
